@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+  ============================================================
+  INDEX.HTML — Atlanta Sports Hub Home Page
+  ============================================================
+  This is the front door of the site.
+  It links to all other pages: World Cup, Sports, Concerts.
+
+  Files used:
+    style.css  → all the visual styling
+    index.html → this file (structure + content)
+  ============================================================
+-->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atlanta Sports Hub</title>
+
+  <!-- Link to our shared stylesheet — one file styles all pages -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /*
+      Page-specific styles go here.
+      Styles that are only needed on THIS page
+      don't belong in style.css (which is shared).
+    */
+
+    /* Animated gradient stripe across the hero */
+    .home-hero {
+      background:
+        linear-gradient(135deg, rgba(168,19,42,0.18) 0%, transparent 50%),
+        linear-gradient(225deg, rgba(240,180,41,0.08) 0%, transparent 50%);
+      border-bottom: 1px solid var(--color-border);
+      padding: 5rem 1.5rem 4rem;
+      text-align: center;
+    }
+
+    .home-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.2rem;
+    }
+
+    .home-hero h1 .line2 {
+      color: var(--color-red);
+    }
+
+    .home-hero p {
+      font-size: 1.1rem;
+      color: var(--color-muted);
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    /* Featured World Cup banner */
+    .wc-banner {
+      background: linear-gradient(135deg, #1a0a00, #2a1500);
+      border: 1.5px solid var(--color-gold);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative glow behind banner */
+    .wc-banner::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(240,180,41,0.15), transparent 70%);
+      pointer-events: none;
+    }
+
+    .wc-banner-text h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      letter-spacing: 0.04em;
+      color: var(--color-gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .wc-banner-text p {
+      color: var(--color-muted);
+      font-size: 0.92rem;
+    }
+
+    .wc-banner-text p strong {
+      color: var(--color-text);
+    }
+
+    /* Sports sections grid */
+    .sports-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Each sport card links to its own page */
+    .sport-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: block;           /* make the whole card clickable */
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .sport-card:hover {
+      border-color: var(--color-red);
+      transform: translateY(-4px);
+    }
+
+    .sport-card .emoji {
+      font-size: 2.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .sport-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.3rem;
+    }
+
+    .sport-card p {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+    }
+
+    .sport-card .tag {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+    }
+
+    .tag-live {
+      color: #4ade80;
+      background: rgba(74, 222, 128, 0.1);
+    }
+
+    .tag-soon {
+      color: var(--color-gold);
+      background: rgba(240,180,41,0.1);
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAVIGATION BAR
+       The nav is the same on every page — only the "active" class
+       moves to highlight which page you're on.
+       ============================================================ -->
+  <nav>
+    <div class="nav-inner">
+
+      <!-- Logo -->
+      <a href="index.html" class="nav-logo">
+        ATL <span>SPORTS</span> HUB
+      </a>
+
+      <!-- Page links -->
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="worldcup.html" class="wc-link">⚽ World Cup</a></li>
+        <li><a href="sports.html">Sports</a></li>
+        <li><a href="concerts.html">Concerts</a></li>
+        <li><a href="learncode.html">Learn to Code</a></li>
+      </ul>
+
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       HERO SECTION
+       The big intro at the top of the home page
+       ============================================================ -->
+  <header class="home-hero">
+    <div class="hero-eyebrow">🏙️ Atlanta, Georgia</div>
+
+    <h1>
+      YOUR CITY.<br>
+      <span class="line2">YOUR SPORTS.</span>
+    </h1>
+
+    <p>
+      The ultimate guide to sports, soccer, and live events
+      happening right here in Atlanta.
+    </p>
+
+    <div class="flex-row" style="justify-content: center;">
+      <a href="worldcup.html" class="btn btn-gold">⚽ World Cup 2026</a>
+      <a href="sports.html" class="btn btn-outline">All ATL Sports</a>
+    </div>
+  </header>
+
+
+  <!-- ============================================================
+       MAIN CONTENT
+       ============================================================ -->
+  <main>
+    <div class="section">
+
+      <!-- WORLD CUP FEATURED BANNER -->
+      <div class="wc-banner">
+        <div class="wc-banner-text">
+          <h2>⚽ FIFA World Cup 2026</h2>
+          <p>
+            <strong>8 matches</strong> at Mercedes-Benz Stadium —
+            including a <strong>Semi-Final on July 15!</strong><br>
+            First Atlanta game: <strong>June 15 · Spain vs. Cabo Verde</strong>
+          </p>
+        </div>
+        <a href="worldcup.html" class="btn btn-gold">See Full Schedule →</a>
+      </div>
+
+
+      <!-- SPORTS SECTIONS -->
+      <h2 class="section-title">Atlanta <span class="accent">Teams</span></h2>
+      <p class="section-subtitle">
+        Click any team to learn more and see upcoming games.
+      </p>
+
+      <div class="sports-grid">
+
+        <!-- World Cup card -->
+        <a href="worldcup.html" class="sport-card">
+          <div class="emoji">⚽</div>
+          <h3>World Cup 2026</h3>
+          <p>8 matches at Mercedes-Benz Stadium. Spain, Morocco & more.</p>
+          <span class="tag tag-live">● Happening Soon</span>
+        </a>
+
+        <!-- Atlanta United -->
+        <a href="sports.html" class="sport-card">
+          <div class="emoji">🦅</div>
+          <h3>Atlanta United</h3>
+          <p>MLS club playing at Mercedes-Benz Stadium. Founded 2017.</p>
+          <span class="tag tag-soon">Coming Soon</span>
+        </a>
+
+        <!-- Atlanta Falcons -->
+        <a href="sports.html" class="sport-card">
+          <div class="emoji">🏈</div>
+          <h3>Atlanta Falcons</h3>
+          <p>NFL franchise. Season kicks off in September.</p>
+          <span class="tag tag-soon">Coming Soon</span>
+        </a>
+
+        <!-- Atlanta Braves -->
+        <a href="sports.html" class="sport-card">
+          <div class="emoji">⚾</div>
+          <h3>Atlanta Braves</h3>
+          <p>MLB champs at Truist Park in Cumberland, GA.</p>
+          <span class="tag tag-soon">Coming Soon</span>
+        </a>
+
+        <!-- Atlanta Hawks -->
+        <a href="sports.html" class="sport-card">
+          <div class="emoji">🏀</div>
+          <h3>Atlanta Hawks</h3>
+          <p>NBA team playing downtown at State Farm Arena.</p>
+          <span class="tag tag-soon">Coming Soon</span>
+        </a>
+
+        <!-- Concerts -->
+        <a href="concerts.html" class="sport-card">
+          <div class="emoji">🎵</div>
+          <h3>Concerts & Events</h3>
+          <p>Live music and major events happening in Atlanta.</p>
+          <span class="tag tag-soon">Coming Soon</span>
+        </a>
+
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- ============================================================
+       FOOTER
+       Same on every page
+       ============================================================ -->
+  <footer>
+    <p>
+      <strong>ATL Sports Hub</strong> · Built with ❤️ in Atlanta, GA ·
+      <span id="year"></span>
+    </p>
+    <p style="margin-top: 0.4rem; font-size: 0.78rem;">
+      A learning project — HTML, CSS &amp; JavaScript · No frameworks used!
+    </p>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+       Just a small script to fill in the current year automatically
+       ============================================================ -->
+  <script>
+    // Get the current year and put it in the footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

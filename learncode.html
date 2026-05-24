@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ============================================================
+  LEARNCODE.HTML — How This Site Was Built
+  ============================================================
+  This page explains the concepts used to build this site,
+  written for someone who is just starting to learn to code.
+  ============================================================
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn to Code · Atlanta Sports Hub</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .learn-hero {
+      background: linear-gradient(135deg, rgba(20,80,20,0.2) 0%, transparent 60%);
+      border-bottom: 1px solid var(--color-border);
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+    }
+    .learn-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 9vw, 6rem);
+      line-height: 0.95;
+      margin-bottom: 1rem;
+    }
+
+    /* Concept cards */
+    .concept-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .concept-card .concept-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .concept-card .concept-emoji { font-size: 2rem; }
+
+    .concept-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+    }
+
+    .concept-card p {
+      color: var(--color-muted);
+      font-size: 0.92rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Code blocks */
+    .code-block {
+      background: #0a0a0a;
+      border: 1px solid #2e2e2e;
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      overflow-x: auto;
+      margin: 0.75rem 0;
+    }
+
+    /* Syntax highlight colors (manual, no library needed!) */
+    .kw  { color: #c792ea; }   /* keywords: const, let, function */
+    .fn  { color: #82aaff; }   /* function names */
+    .str { color: #c3e88d; }   /* strings */
+    .num { color: #f78c6c; }   /* numbers */
+    .cmt { color: #546e7a; font-style: italic; } /* comments */
+    .tag { color: #f07178; }   /* HTML tags */
+    .atr { color: #ffcb6b; }   /* HTML attributes */
+    .val { color: #c3e88d; }   /* attribute values */
+
+    /* Challenges section */
+    .challenges-list {
+      list-style: none;
+      counter-reset: challenge-counter;
+    }
+
+    .challenges-list li {
+      counter-increment: challenge-counter;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1rem 1rem 1rem 3rem;
+      margin-bottom: 0.6rem;
+      position: relative;
+      font-size: 0.92rem;
+    }
+
+    .challenges-list li::before {
+      content: counter(challenge-counter);
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--color-gold);
+    }
+
+    .challenges-list li strong {
+      color: var(--color-text);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .challenges-list li span {
+      color: var(--color-muted);
+      font-size: 0.83rem;
+    }
+
+    /* Files map */
+    .file-tree {
+      background: #0a0a0a;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.5rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.88rem;
+      line-height: 2;
+    }
+
+    .file-tree .folder { color: var(--color-gold); }
+    .file-tree .file   { color: #82aaff; }
+    .file-tree .note   { color: var(--color-muted); font-size: 0.78rem; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">ATL <span>SPORTS</span> HUB</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="worldcup.html" class="wc-link">⚽ World Cup</a></li>
+        <li><a href="sports.html">Sports</a></li>
+        <li><a href="concerts.html">Concerts</a></li>
+        <li><a href="learncode.html" class="active">Learn to Code</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="learn-hero">
+    <div class="hero-eyebrow">💻 For Developers</div>
+    <h1>HOW THIS<br><span style="color:var(--color-red);">SITE WORKS</span></h1>
+    <p style="color:var(--color-muted); max-width:520px; margin:0 auto;">
+      A behind-the-scenes look at the HTML, CSS, and JavaScript
+      that powers Atlanta Sports Hub — written for beginners.
+    </p>
+  </header>
+
+  <main>
+    <div class="section">
+
+      <!-- FILE STRUCTURE -->
+      <h2 class="section-title">The <span class="accent">Files</span></h2>
+      <p class="section-subtitle">Every page on this site is a separate file in one folder.</p>
+
+      <div class="file-tree">
+        <div><span class="folder">📁 atlanta-sports/</span></div>
+        <div>&nbsp;&nbsp;<span class="file">📄 index.html</span> &nbsp;<span class="note">← Home page</span></div>
+        <div>&nbsp;&nbsp;<span class="file">📄 worldcup.html</span> &nbsp;<span class="note">← World Cup schedule</span></div>
+        <div>&nbsp;&nbsp;<span class="file">📄 sports.html</span> &nbsp;<span class="note">← Atlanta teams</span></div>
+        <div>&nbsp;&nbsp;<span class="file">📄 concerts.html</span> &nbsp;<span class="note">← Concerts & events</span></div>
+        <div>&nbsp;&nbsp;<span class="file">📄 learncode.html</span> &nbsp;<span class="note">← This page!</span></div>
+        <div>&nbsp;&nbsp;<span class="file">🎨 style.css</span> &nbsp;<span class="note">← Styles for ALL pages</span></div>
+      </div>
+
+      <br>
+
+      <!-- HTML CONCEPT -->
+      <div class="concept-card">
+        <div class="concept-header">
+          <span class="concept-emoji">🏗️</span>
+          <h3>HTML — The Structure</h3>
+        </div>
+        <p>
+          HTML (HyperText Markup Language) is the skeleton of every webpage.
+          It uses <strong>tags</strong> — words inside angle brackets — to define
+          what each piece of content is. Is it a heading? A paragraph? A link? A table?
+        </p>
+        <div class="code-block">
+<span class="cmt">&lt;!-- A heading --&gt;</span>
+<span class="tag">&lt;h1&gt;</span>Atlanta Sports Hub<span class="tag">&lt;/h1&gt;</span>
+
+<span class="cmt">&lt;!-- A paragraph --&gt;</span>
+<span class="tag">&lt;p&gt;</span>The World Cup is coming to Atlanta!<span class="tag">&lt;/p&gt;</span>
+
+<span class="cmt">&lt;!-- A link --&gt;</span>
+<span class="tag">&lt;a</span> <span class="atr">href=</span><span class="val">"worldcup.html"</span><span class="tag">&gt;</span>See the schedule<span class="tag">&lt;/a&gt;</span>
+
+<span class="cmt">&lt;!-- A button --&gt;</span>
+<span class="tag">&lt;button</span> <span class="atr">onclick=</span><span class="val">"doSomething()"</span><span class="tag">&gt;</span>Click me!<span class="tag">&lt;/button&gt;</span>
+        </div>
+        <p>
+          On this site, HTML defines the navigation bar, the match table, the cards,
+          the hero sections, and everything else you can see on the page.
+        </p>
+      </div>
+
+      <!-- CSS CONCEPT -->
+      <div class="concept-card">
+        <div class="concept-header">
+          <span class="concept-emoji">🎨</span>
+          <h3>CSS — The Style</h3>
+        </div>
+        <p>
+          CSS (Cascading Style Sheets) makes HTML look good. Without CSS, every page
+          would be plain black text on a white background. CSS controls colors,
+          fonts, spacing, layout, animations, and more.
+        </p>
+        <div class="code-block">
+<span class="cmt">/* CSS Variables — define colors once, reuse everywhere */</span>
+<span class="tag">:root</span> {
+  <span class="atr">--color-red</span>: <span class="val">#a8132a</span>;
+  <span class="atr">--color-gold</span>: <span class="val">#f0b429</span>;
+}
+
+<span class="cmt">/* Style the nav bar */</span>
+<span class="tag">nav</span> {
+  <span class="atr">background-color</span>: <span class="val">var(--color-bg)</span>;
+  <span class="atr">border-bottom</span>: <span class="val">2px solid var(--color-red)</span>;
+  <span class="atr">position</span>: <span class="val">sticky</span>;   <span class="cmt">/* stays at top while scrolling */</span>
+  <span class="atr">top</span>: <span class="val">0</span>;
+}
+
+<span class="cmt">/* Animate a button on hover */</span>
+<span class="tag">.btn:hover</span> {
+  <span class="atr">transform</span>: <span class="val">translateY(-2px)</span>;  <span class="cmt">/* lift up 2px */</span>
+  <span class="atr">transition</span>: <span class="val">transform 0.15s</span>;
+}
+        </div>
+        <p>
+          All the styles for this site live in <strong>style.css</strong> — one shared file.
+          That's why every page looks consistent. Change the gold color in one place
+          and it updates across the whole site instantly.
+        </p>
+      </div>
+
+      <!-- JAVASCRIPT CONCEPT -->
+      <div class="concept-card">
+        <div class="concept-header">
+          <span class="concept-emoji">⚡</span>
+          <h3>JavaScript — The Behavior</h3>
+        </div>
+        <p>
+          JavaScript makes pages interactive. It can respond to clicks, read input,
+          show/hide content, count down to a date, and much more — all without
+          reloading the page.
+        </p>
+        <div class="code-block">
+<span class="cmt">// Store all matches in an array of objects</span>
+<span class="kw">const</span> <span class="fn">matches</span> = [
+  { home: <span class="str">"Spain"</span>, away: <span class="str">"Cabo Verde"</span>, atl: <span class="kw">true</span>  },
+  { home: <span class="str">"Morocco"</span>, away: <span class="str">"Haiti"</span>,    atl: <span class="kw">true</span>  },
+  { home: <span class="str">"Brazil"</span>, away: <span class="str">"France"</span>,    atl: <span class="kw">false</span> },
+];
+
+<span class="cmt">// Filter to Atlanta games only</span>
+<span class="kw">const</span> atlGames = matches.<span class="fn">filter</span>(m => m.atl === <span class="kw">true</span>);
+
+<span class="cmt">// Countdown timer — runs every second</span>
+<span class="fn">setInterval</span>(<span class="kw">function</span>() {
+  <span class="kw">const</span> target = <span class="kw">new</span> <span class="fn">Date</span>(<span class="str">'2026-06-15T12:00:00'</span>);
+  <span class="kw">const</span> diff = target - <span class="kw">new</span> <span class="fn">Date</span>();
+  <span class="kw">const</span> days = <span class="fn">Math.floor</span>(diff / <span class="num">86400000</span>);
+  document.<span class="fn">getElementById</span>(<span class="str">'cd-days'</span>).textContent = days;
+}, <span class="num">1000</span>);
+        </div>
+        <p>
+          On the World Cup page, JavaScript does three big jobs:
+          <br>① Builds all 104 table rows from the data array
+          <br>② Powers the filter buttons and search box
+          <br>③ Runs the live countdown timer
+        </p>
+      </div>
+
+      <!-- CHALLENGES -->
+      <br>
+      <h2 class="section-title">Your <span class="accent">Challenges</span></h2>
+      <p class="section-subtitle">Things to build next — in order of difficulty.</p>
+
+      <ul class="challenges-list">
+        <li>
+          <strong>Change the color scheme</strong>
+          <span>Open style.css and change --color-red and --color-gold to new colors. See how the whole site changes!</span>
+        </li>
+        <li>
+          <strong>Add a new sport card on the home page</strong>
+          <span>Copy one of the .sport-card blocks in index.html and change the emoji, name, and description.</span>
+        </li>
+        <li>
+          <strong>Add a real Braves or Falcons game to sports.html</strong>
+          <span>Look up a real upcoming game and replace the "Coming Soon" placeholder with a real date, opponent, and time.</span>
+        </li>
+        <li>
+          <strong>Add a "Favorite Teams" feature with JavaScript</strong>
+          <span>Add a ⭐ button to each team card. When clicked, save the choice with localStorage and show it on the home page.</span>
+        </li>
+        <li>
+          <strong>Make the site mobile-friendly</strong>
+          <span>Resize your browser window to phone size. What breaks? Use CSS media queries to fix it.</span>
+        </li>
+        <li>
+          <strong>Add a dark/light mode toggle</strong>
+          <span>Add a 🌙/☀️ button to the nav bar. When clicked, use JavaScript to switch a CSS class on &lt;body&gt; that changes the colors.</span>
+        </li>
+        <li>
+          <strong>Deploy to GitHub Pages</strong>
+          <span>Create a free GitHub account, upload this folder, and turn on GitHub Pages. Your site goes live on the internet!</span>
+        </li>
+      </ul>
+
+    </div>
+  </main>
+
+  <footer>
+    <p><strong>ATL Sports Hub</strong> · Built with ❤️ in Atlanta, GA · <span id="year"></span></p>
+    <p style="margin-top:0.4rem; font-size:0.78rem;">No frameworks · No libraries · Pure HTML, CSS & JavaScript</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

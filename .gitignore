@@ -1,0 +1,11 @@
+# .gitignore — Atlanta Sports Hub
+# This file tells Git which files NOT to upload to GitHub.
+# Currently empty — this is a plain HTML/CSS/JS project
+# with nothing to ignore.
+#
+# Common things you might add later if the project grows:
+#
+# .DS_Store          ← Mac system file, no need to upload
+# Thumbs.db          ← Windows system file
+# node_modules/      ← if you ever add npm packages
+# .env               ← if you ever add secret keys/passwords

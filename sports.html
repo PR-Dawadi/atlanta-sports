@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ============================================================
+  SPORTS.HTML — Atlanta Sports Teams
+  ============================================================
+  This is a placeholder page. It shows the structure
+  and design but says "Coming Soon" for each team section.
+
+  YOUR CHALLENGE: Pick one team and fill it in!
+  Add real schedule data (like we did for the World Cup),
+  team history, stadium info, etc.
+  ============================================================
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atlanta Sports · Atlanta Sports Hub</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .sports-hero {
+      background: linear-gradient(135deg, rgba(168,19,42,0.2) 0%, transparent 60%);
+      border-bottom: 1px solid var(--color-border);
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+    }
+
+    .sports-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 9vw, 6rem);
+      line-height: 0.95;
+      margin-bottom: 1rem;
+    }
+
+    .team-section {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .team-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .team-emoji {
+      font-size: 3rem;
+    }
+
+    .team-header h2 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      letter-spacing: 0.04em;
+    }
+
+    .team-header .league {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      background: rgba(240,180,41,0.1);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+    }
+
+    .team-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .team-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+    }
+
+    .team-card h4 {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .team-card p {
+      font-size: 0.9rem;
+      color: var(--color-text);
+    }
+
+    .placeholder-banner {
+      background: var(--color-surface);
+      border: 1.5px dashed var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      color: var(--color-muted);
+      font-size: 0.9rem;
+      margin-top: 1.5rem;
+    }
+
+    .placeholder-banner .icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .placeholder-banner strong {
+      color: var(--color-gold);
+    }
+
+    @media (max-width: 500px) {
+      .team-body { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">ATL <span>SPORTS</span> HUB</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="worldcup.html" class="wc-link">⚽ World Cup</a></li>
+        <li><a href="sports.html" class="active">Sports</a></li>
+        <li><a href="concerts.html">Concerts</a></li>
+        <li><a href="learncode.html">Learn to Code</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="sports-hero">
+    <div class="hero-eyebrow">🏙️ Atlanta, Georgia</div>
+    <h1>ATLANTA<br><span style="color:var(--color-red);">TEAMS</span></h1>
+    <p style="color:var(--color-muted); max-width:480px; margin:0 auto;">
+      Your home for schedules, stats, and stories from all of Atlanta's major sports teams.
+    </p>
+  </header>
+
+  <main>
+
+    <!-- ATLANTA UNITED -->
+    <div class="team-section">
+      <div class="team-header">
+        <div class="team-emoji">🦅</div>
+        <div>
+          <h2>Atlanta United FC</h2>
+          <span class="league">MLS</span>
+        </div>
+      </div>
+      <p style="color:var(--color-muted); font-size:0.92rem; max-width:600px;">
+        Atlanta's MLS club, founded in 2017. Plays at Mercedes-Benz Stadium — the same venue hosting
+        World Cup 2026 games. Won the MLS Cup in 2018.
+      </p>
+      <div class="team-body">
+        <div class="team-card">
+          <h4>Home Stadium</h4>
+          <p>Mercedes-Benz Stadium<br><span style="color:var(--color-muted); font-size:0.82rem;">75,000 capacity · Downtown ATL</span></p>
+        </div>
+        <div class="team-card">
+          <h4>Founded</h4>
+          <p>2017 · MLS Cup Champions 2018</p>
+        </div>
+      </div>
+      <div class="placeholder-banner">
+        <div class="icon">🚧</div>
+        <p><strong>Coming Soon</strong> — Add the 2026 MLS schedule here!<br>
+        <span style="font-size:0.82rem;">Tip: Look up the Atlanta United schedule and add match data the same way we did for the World Cup.</span></p>
+      </div>
+    </div>
+
+    <!-- ATLANTA FALCONS -->
+    <div class="team-section">
+      <div class="team-header">
+        <div class="team-emoji">🏈</div>
+        <div>
+          <h2>Atlanta Falcons</h2>
+          <span class="league">NFL</span>
+        </div>
+      </div>
+      <p style="color:var(--color-muted); font-size:0.92rem; max-width:600px;">
+        Atlanta's NFL franchise, playing in the NFC South. Season runs September through January.
+        Home of the infamous "28-3" Super Bowl comeback story.
+      </p>
+      <div class="team-body">
+        <div class="team-card">
+          <h4>Home Stadium</h4>
+          <p>Mercedes-Benz Stadium<br><span style="color:var(--color-muted); font-size:0.82rem;">71,000 capacity · Downtown ATL</span></p>
+        </div>
+        <div class="team-card">
+          <h4>Season</h4>
+          <p>September – January<br><span style="color:var(--color-muted); font-size:0.82rem;">17 regular season games</span></p>
+        </div>
+      </div>
+      <div class="placeholder-banner">
+        <div class="icon">🚧</div>
+        <p><strong>Coming Soon</strong> — Add the 2026 NFL season schedule here!</p>
+      </div>
+    </div>
+
+    <!-- ATLANTA BRAVES -->
+    <div class="team-section">
+      <div class="team-header">
+        <div class="team-emoji">⚾</div>
+        <div>
+          <h2>Atlanta Braves</h2>
+          <span class="league">MLB</span>
+        </div>
+      </div>
+      <p style="color:var(--color-muted); font-size:0.92rem; max-width:600px;">
+        One of the oldest teams in Major League Baseball. 2021 World Series Champions.
+        Play at Truist Park in Cumberland, GA — just northwest of Atlanta.
+      </p>
+      <div class="team-body">
+        <div class="team-card">
+          <h4>Home Stadium</h4>
+          <p>Truist Park<br><span style="color:var(--color-muted); font-size:0.82rem;">41,000 capacity · Cumberland, GA</span></p>
+        </div>
+        <div class="team-card">
+          <h4>Season</h4>
+          <p>April – October<br><span style="color:var(--color-muted); font-size:0.82rem;">162 regular season games</span></p>
+        </div>
+      </div>
+      <div class="placeholder-banner">
+        <div class="icon">🚧</div>
+        <p><strong>Coming Soon</strong> — Add the 2026 MLB schedule here!</p>
+      </div>
+    </div>
+
+    <!-- ATLANTA HAWKS -->
+    <div class="team-section">
+      <div class="team-header">
+        <div class="team-emoji">🏀</div>
+        <div>
+          <h2>Atlanta Hawks</h2>
+          <span class="league">NBA</span>
+        </div>
+      </div>
+      <p style="color:var(--color-muted); font-size:0.92rem; max-width:600px;">
+        Atlanta's NBA team, playing downtown at State Farm Arena. Known for their fast-paced,
+        exciting style of play and passionate fan base.
+      </p>
+      <div class="team-body">
+        <div class="team-card">
+          <h4>Home Stadium</h4>
+          <p>State Farm Arena<br><span style="color:var(--color-muted); font-size:0.82rem;">20,000 capacity · Downtown ATL</span></p>
+        </div>
+        <div class="team-card">
+          <h4>Season</h4>
+          <p>October – April<br><span style="color:var(--color-muted); font-size:0.82rem;">82 regular season games</span></p>
+        </div>
+      </div>
+      <div class="placeholder-banner">
+        <div class="icon">🚧</div>
+        <p><strong>Coming Soon</strong> — Add the 2025-26 NBA schedule here!</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p><strong>ATL Sports Hub</strong> · Built with ❤️ in Atlanta, GA · <span id="year"></span></p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ============================================================
+  CONCERTS.HTML — Atlanta Concerts & Events (Placeholder)
+  ============================================================
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concerts & Events · Atlanta Sports Hub</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .concerts-hero {
+      background: linear-gradient(135deg, rgba(100,20,120,0.2) 0%, transparent 60%);
+      border-bottom: 1px solid var(--color-border);
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+    }
+    .concerts-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 9vw, 6rem);
+      line-height: 0.95;
+      margin-bottom: 1rem;
+    }
+
+    .venues-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .venue-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem;
+    }
+
+    .venue-card .v-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
+    .venue-card h3 { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.04em; margin-bottom: 0.3rem; }
+    .venue-card p { font-size: 0.85rem; color: var(--color-muted); }
+
+    .placeholder-big {
+      background: var(--color-surface);
+      border: 1.5px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 4rem 2rem;
+      text-align: center;
+      color: var(--color-muted);
+      margin-top: 2rem;
+    }
+    .placeholder-big .big-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .placeholder-big h3 { font-family: var(--font-display); font-size: 1.8rem; color: var(--color-text); margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">ATL <span>SPORTS</span> HUB</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="worldcup.html" class="wc-link">⚽ World Cup</a></li>
+        <li><a href="sports.html">Sports</a></li>
+        <li><a href="concerts.html" class="active">Concerts</a></li>
+        <li><a href="learncode.html">Learn to Code</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="concerts-hero">
+    <div class="hero-eyebrow">🎵 Live Events</div>
+    <h1>CONCERTS<br><span style="color:var(--color-red);">& EVENTS</span></h1>
+    <p style="color:var(--color-muted); max-width:480px; margin:0 auto;">
+      Atlanta is one of the best live music cities in the world. From Coca-Cola Roxy to State Farm Arena — here's what's happening.
+    </p>
+  </header>
+
+  <main>
+    <div class="section">
+
+      <!-- Venues -->
+      <h2 class="section-title">Major <span class="accent">Venues</span></h2>
+      <p class="section-subtitle">Atlanta's top spots for live music and events.</p>
+
+      <div class="venues-grid">
+        <div class="venue-card">
+          <div class="v-emoji">🏟️</div>
+          <h3>State Farm Arena</h3>
+          <p>Downtown · 20,000 capacity · Home of the Hawks + major concerts</p>
+        </div>
+        <div class="venue-card">
+          <div class="v-emoji">🎸</div>
+          <h3>Coca-Cola Roxy</h3>
+          <p>Battery Atlanta · 4,000 capacity · Mid-size venue next to Truist Park</p>
+        </div>
+        <div class="venue-card">
+          <div class="v-emoji">🎶</div>
+          <h3>Chastain Park</h3>
+          <p>Buckhead · 7,000 capacity · Outdoor amphitheater · BYOB friendly</p>
+        </div>
+        <div class="venue-card">
+          <div class="v-emoji">🌿</div>
+          <h3>Ameris Bank Amphitheatre</h3>
+          <p>Alpharetta · 12,000 capacity · Outdoor summer venue</p>
+        </div>
+        <div class="venue-card">
+          <div class="v-emoji">🎤</div>
+          <h3>Mercedes-Benz Stadium</h3>
+          <p>Downtown · 75,000 capacity · Major stadium shows</p>
+        </div>
+        <div class="venue-card">
+          <div class="v-emoji">🎵</div>
+          <h3>Variety Playhouse</h3>
+          <p>Little Five Points · 1,000 capacity · Indie & alternative scene</p>
+        </div>
+      </div>
+
+      <!-- Placeholder for events listing -->
+      <div class="placeholder-big">
+        <div class="big-icon">🚧</div>
+        <h3>Upcoming Events — Coming Soon!</h3>
+        <p style="max-width:440px; margin:0 auto; font-size:0.9rem;">
+          This is where you'll add a list of upcoming concerts and events in Atlanta.<br><br>
+          <strong style="color:var(--color-gold);">Challenge:</strong> Look up events on a site like
+          Ticketmaster or Eventbrite, then add them here as cards — just like the World Cup match cards!
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <p><strong>ATL Sports Hub</strong> · Built with ❤️ in Atlanta, GA · <span id="year"></span></p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+/*
+  ============================================================
+  STYLE.CSS — Shared stylesheet for Atlanta Sports Hub
+  ============================================================
+  This single file styles ALL pages on the site.
+  Every HTML page links to this file with:
+    <link rel="stylesheet" href="style.css">
+
+  CSS is organized in sections:
+  1. Fonts & Variables
+  2. Reset & Base
+  3. Navigation
+  4. Buttons
+  5. Hero sections
+  6. Cards
+  7. Footer
+  8. Utility classes
+  ============================================================
+*/
+
+
+/* ============================================================
+   1. FONTS & VARIABLES
+   ============================================================ */
+
+/* Import fonts from Google Fonts (free!) */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap');
+
+/*
+  CSS Variables — define once, use everywhere.
+  To change the whole site's color scheme,
+  just edit these values!
+*/
+:root {
+  /* Colors — Atlanta red/black/gold palette */
+  --color-bg:        #0d0d0d;      /* near-black background */
+  --color-surface:   #1a1a1a;      /* slightly lighter panels */
+  --color-surface2:  #242424;      /* even lighter for hover states */
+  --color-red:       #a8132a;      /* Atlanta Falcons / United red */
+  --color-gold:      #f0b429;      /* warm gold accent */
+  --color-text:      #f0ece4;      /* warm off-white */
+  --color-muted:     #888880;      /* dimmer text */
+  --color-border:    #2e2e2e;      /* subtle borders */
+
+  /* Atlanta highlight — used to flag Atlanta games */
+  --color-atl:       #f0b429;
+  --color-atl-bg:    rgba(240, 180, 41, 0.08);
+
+  /* Typography */
+  --font-display:    'Bebas Neue', sans-serif;   /* big bold headings */
+  --font-body:       'Nunito', sans-serif;        /* readable body text */
+
+  /* Spacing & shape */
+  --radius:          10px;
+  --radius-lg:       16px;
+  --max-width:       1100px;
+}
+
+
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
+
+/* Remove default browser spacing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;   /* smooth scroll when clicking nav links */
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Images scale down to fit their container */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Horizontal rule */
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 2rem 0;
+}
+
+
+/* ============================================================
+   3. NAVIGATION
+   ============================================================ */
+
+nav {
+  background-color: var(--color-bg);
+  border-bottom: 2px solid var(--color-red);
+  position: sticky;        /* sticks to top of screen while scrolling */
+  top: 0;
+  z-index: 100;            /* floats above everything else */
+}
+
+.nav-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+/* Site logo / name */
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-logo span {
+  color: var(--color-red);
+}
+
+/* Navigation links */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.nav-links a {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius);
+  transition: color 0.2s, background 0.2s;
+}
+
+/* Highlight the current page link */
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+/* Special highlight for World Cup link */
+.nav-links a.wc-link {
+  color: var(--color-gold);
+}
+
+.nav-links a.wc-link:hover {
+  background: rgba(240, 180, 41, 0.12);
+}
+
+
+/* ============================================================
+   4. BUTTONS
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Solid red button */
+.btn-red {
+  background: var(--color-red);
+  color: white;
+  box-shadow: 0 4px 16px rgba(168, 19, 42, 0.3);
+}
+
+.btn-red:hover {
+  background: #c0152f;
+  box-shadow: 0 6px 20px rgba(168, 19, 42, 0.45);
+}
+
+/* Gold button */
+.btn-gold {
+  background: var(--color-gold);
+  color: #0d0d0d;
+  box-shadow: 0 4px 16px rgba(240, 180, 41, 0.3);
+}
+
+.btn-gold:hover {
+  box-shadow: 0 6px 20px rgba(240, 180, 41, 0.45);
+}
+
+/* Outline / ghost button */
+.btn-outline {
+  background: transparent;
+  color: var(--color-text);
+  border: 1.5px solid var(--color-border);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  transform: translateY(-2px);
+}
+
+/* Active/selected state for filter buttons */
+.btn-outline.active {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  color: #0d0d0d;
+}
+
+
+/* ============================================================
+   5. HERO SECTIONS
+   ============================================================ */
+
+.hero {
+  padding: 5rem 1.5rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Diagonal red stripe behind hero — decorative */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(168,19,42,0.15) 0%, transparent 70%);
+  pointer-events: none;   /* don't block clicks */
+}
+
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 1rem;
+  padding: 0.3rem 0.9rem;
+  border: 1.5px solid rgba(240,180,41,0.3);
+  border-radius: 999px;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1.0;
+  letter-spacing: 0.03em;
+  margin-bottom: 1.2rem;
+}
+
+.hero h1 .accent {
+  color: var(--color-red);
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: var(--color-muted);
+  max-width: 560px;
+  margin: 0 auto 2rem;
+}
+
+/* ============================================================
+   6. SECTION LAYOUT
+   ============================================================ */
+
+.section {
+  padding: 3rem 1.5rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.section-title .accent {
+  color: var(--color-red);
+}
+
+.section-subtitle {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+
+/* ============================================================
+   7. CARDS
+   ============================================================ */
+
+/* Generic card — used on home page for sport sections */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: var(--color-red);
+  transform: translateY(-3px);
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.card h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+}
+
+.card p {
+  font-size: 0.88rem;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.card .coming-soon {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  background: rgba(240,180,41,0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+
+/* ============================================================
+   8. FOOTER
+   ============================================================ */
+
+footer {
+  background: var(--color-surface);
+  border-top: 2px solid var(--color-red);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  margin-top: 4rem;
+}
+
+footer strong {
+  color: var(--color-gold);
+  font-weight: 800;
+}
+
+
+/* ============================================================
+   9. UTILITY CLASSES
+   ============================================================ */
+
+/* Center content horizontally */
+.center { text-align: center; }
+
+/* Max-width container */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Flex row with gap */
+.flex-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Hide something (used by JavaScript) */
+.hidden { display: none !important; }
+
+/* Atlanta game highlight badge */
+.atl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-bg);
+  background: var(--color-gold);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+/*
+  ============================================================
+  📝 LEARNING NOTE
+  ============================================================
+  Notice how every page on this site looks consistent?
+  That's because they all share THIS file.
+
+  If you want to:
+  - Change the red color   → edit --color-red
+  - Change the font        → edit --font-body or --font-display
+  - Change card spacing    → edit the .card padding
+
+  One change here = updates everywhere. That's the power of CSS!
+  ============================================================
+*/

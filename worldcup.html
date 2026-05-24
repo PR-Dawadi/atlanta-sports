@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+  ============================================================
+  WORLDCUP.HTML — FIFA World Cup 2026 Schedule Page
+  ============================================================
+  This is the main feature page of the site.
+
+  What's on this page:
+  - Countdown timer to Atlanta's first game (JavaScript!)
+  - Atlanta's 8 games at Mercedes-Benz Stadium
+  - Full schedule of all 104 matches
+  - Filter buttons to show: All Games / Atlanta Only / by Round
+  - Search box to find a specific country
+
+  Things to learn here:
+  - How JavaScript reads & manipulates HTML (the DOM)
+  - Arrays and objects to store match data
+  - Functions that filter and display data
+  - setInterval() for a live countdown timer
+  ============================================================
+-->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Cup 2026 · Atlanta Sports Hub</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ---- PAGE HERO ---- */
+    .wc-hero {
+      background:
+        linear-gradient(160deg, rgba(168,19,42,0.25) 0%, transparent 45%),
+        linear-gradient(300deg, rgba(240,180,41,0.1) 0%, transparent 50%);
+      border-bottom: 1px solid var(--color-border);
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+    }
+
+    .wc-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 9vw, 6.5rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .wc-hero h1 em {
+      font-style: normal;
+      color: var(--color-gold);
+    }
+
+    .wc-hero p {
+      color: var(--color-muted);
+      font-size: 1rem;
+      max-width: 520px;
+      margin: 0 auto 2rem;
+    }
+
+    /* ---- COUNTDOWN TIMER ---- */
+    .countdown-box {
+      display: inline-flex;
+      gap: 1.5rem;
+      background: var(--color-surface);
+      border: 1.5px solid var(--color-gold);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem 2rem;
+      margin: 0 auto 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .countdown-unit {
+      text-align: center;
+      min-width: 54px;
+    }
+
+    .countdown-number {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      color: var(--color-gold);
+      line-height: 1;
+      display: block;
+    }
+
+    .countdown-label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-top: 0.2rem;
+      display: block;
+    }
+
+    .countdown-sep {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--color-border);
+      line-height: 1;
+      padding-top: 0.1rem;
+    }
+
+    /* ---- ATLANTA GAMES STRIP ---- */
+    .atl-strip {
+      background: linear-gradient(135deg, #1c1200, #1a0a00);
+      border-top: 2px solid var(--color-gold);
+      border-bottom: 2px solid var(--color-gold);
+      padding: 2.5rem 1.5rem;
+    }
+
+    .atl-strip-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .atl-strip h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      color: var(--color-gold);
+      margin-bottom: 0.3rem;
+    }
+
+    .atl-strip .sub {
+      color: var(--color-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Horizontal scrolling row of Atlanta game cards */
+    .atl-games-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .atl-game-card {
+      background: var(--color-surface);
+      border: 1.5px solid rgba(240,180,41,0.3);
+      border-radius: var(--radius);
+      padding: 1rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .atl-game-card:hover {
+      border-color: var(--color-gold);
+      transform: translateY(-2px);
+    }
+
+    .atl-game-card .round-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .atl-game-card .match-teams {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.3rem;
+      line-height: 1.2;
+    }
+
+    .atl-game-card .match-info {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+    }
+
+    /* ---- FULL SCHEDULE SECTION ---- */
+    .schedule-section {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Filter + search toolbar */
+    .toolbar {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .toolbar-search {
+      flex: 1;
+      min-width: 180px;
+      max-width: 280px;
+    }
+
+    .toolbar-search input {
+      width: 100%;
+      background: var(--color-surface);
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      padding: 0.55rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .toolbar-search input:focus {
+      border-color: var(--color-gold);
+    }
+
+    .toolbar-search input::placeholder {
+      color: var(--color-muted);
+    }
+
+    /* ---- MATCH TABLE ---- */
+    /* We use a table here because it's the right HTML for tabular data */
+    .match-table {
+      width: 100%;
+      border-collapse: collapse;   /* removes double borders between cells */
+      font-size: 0.88rem;
+    }
+
+    .match-table thead th {
+      background: var(--color-surface);
+      color: var(--color-muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      border-bottom: 2px solid var(--color-border);
+      white-space: nowrap;
+    }
+
+    .match-table tbody tr {
+      border-bottom: 1px solid var(--color-border);
+      transition: background 0.15s;
+    }
+
+    .match-table tbody tr:hover {
+      background: var(--color-surface);
+    }
+
+    /* Atlanta game rows get a special gold tint */
+    .match-table tbody tr.atl-row {
+      background: var(--color-atl-bg);
+      border-left: 3px solid var(--color-gold);
+    }
+
+    .match-table tbody tr.atl-row:hover {
+      background: rgba(240,180,41,0.12);
+    }
+
+    .match-table td {
+      padding: 0.65rem 0.8rem;
+      vertical-align: middle;
+    }
+
+    .match-teams-cell {
+      font-weight: 700;
+    }
+
+    .match-teams-cell .vs {
+      color: var(--color-muted);
+      font-weight: 400;
+      font-size: 0.8rem;
+      margin: 0 0.3rem;
+    }
+
+    .group-chip {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      background: var(--color-surface2);
+      color: var(--color-muted);
+    }
+
+    .venue-cell {
+      color: var(--color-muted);
+      font-size: 0.82rem;
+    }
+
+    .date-cell {
+      white-space: nowrap;
+      color: var(--color-muted);
+      font-size: 0.82rem;
+    }
+
+    .time-cell {
+      white-space: nowrap;
+      font-size: 0.82rem;
+    }
+
+    /* "No results" message */
+    #no-results {
+      text-align: center;
+      padding: 3rem;
+      color: var(--color-muted);
+      font-size: 1rem;
+    }
+
+    /* Round heading rows inside the table */
+    .round-header-row td {
+      background: var(--color-surface);
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-red);
+      padding: 0.6rem 0.8rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    /* Stat bar below schedule */
+    .stats-bar {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--color-gold);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+
+    /* Responsive: hide some columns on small screens */
+    @media (max-width: 640px) {
+      .hide-mobile { display: none; }
+      .match-table { font-size: 0.82rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">ATL <span>SPORTS</span> HUB</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="worldcup.html" class="active wc-link">⚽ World Cup</a></li>
+        <li><a href="sports.html">Sports</a></li>
+        <li><a href="concerts.html">Concerts</a></li>
+        <li><a href="learncode.html">Learn to Code</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+  <header class="wc-hero">
+    <div class="hero-eyebrow">🏆 FIFA World Cup 2026™</div>
+    <h1>THE WORLD<br>COMES TO <em>ATL</em></h1>
+    <p>
+      8 matches at Mercedes-Benz Stadium · June 15 – July 15, 2026 ·
+      Including the <strong>Semi-Final</strong>
+    </p>
+
+    <!-- COUNTDOWN TIMER — filled in by JavaScript below -->
+    <div class="countdown-box" id="countdown-box">
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-days">--</span>
+        <span class="countdown-label">Days</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-hours">--</span>
+        <span class="countdown-label">Hours</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-mins">--</span>
+        <span class="countdown-label">Mins</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-secs">--</span>
+        <span class="countdown-label">Secs</span>
+      </div>
+    </div>
+    <p style="font-size:0.8rem; color: var(--color-muted);">
+      ⏳ Until Atlanta's first game: Spain vs. Cabo Verde · Jun 15, 12PM ET
+    </p>
+  </header>
+
+
+  <!-- ATLANTA GAMES STRIP -->
+  <div class="atl-strip">
+    <div class="atl-strip-inner">
+      <h2>📍 Atlanta's 8 Games</h2>
+      <p class="sub">Mercedes-Benz Stadium · All times Eastern (ET)</p>
+
+      <!-- These cards are hardcoded HTML — Atlanta games won't change -->
+      <div class="atl-games-row">
+
+        <div class="atl-game-card">
+          <div class="round-tag">Group H · Match 1</div>
+          <div class="match-teams">Spain<br>vs. Cabo Verde</div>
+          <div class="match-info">☀️ Jun 15 · 12:00 PM ET</div>
+        </div>
+
+        <div class="atl-game-card">
+          <div class="round-tag">Group A · Match 1</div>
+          <div class="match-teams">Czechia<br>vs. South Africa</div>
+          <div class="match-info">☀️ Jun 18 · 12:00 PM ET</div>
+        </div>
+
+        <div class="atl-game-card">
+          <div class="round-tag">Group H · Match 2</div>
+          <div class="match-teams">Spain<br>vs. Saudi Arabia</div>
+          <div class="match-info">☀️ Jun 21 · 12:00 PM ET</div>
+        </div>
+
+        <div class="atl-game-card">
+          <div class="round-tag">Group C · Match 2</div>
+          <div class="match-teams">Morocco<br>vs. Haiti</div>
+          <div class="match-info">🌙 Jun 24 · 6:00 PM ET</div>
+        </div>
+
+        <div class="atl-game-card">
+          <div class="round-tag">Group K · Match 2</div>
+          <div class="match-teams">DR Congo<br>vs. Uzbekistan</div>
+          <div class="match-info">🌙 Jun 27 · 7:30 PM ET</div>
+        </div>
+
+        <div class="atl-game-card">
+          <div class="round-tag">Round of 32</div>
+          <div class="match-teams">1L vs.<br>Best 3rd (EHIJK)</div>
+          <div class="match-info">☀️ Jul 1 · 12:00 PM ET</div>
+        </div>
+
+        <div class="atl-game-card">
+          <div class="round-tag">Round of 16</div>
+          <div class="match-teams">Winner R32<br>vs. Winner R32</div>
+          <div class="match-info">☀️ Jul 7 · 12:00 PM ET</div>
+        </div>
+
+        <div class="atl-game-card" style="border-color: var(--color-gold);">
+          <div class="round-tag" style="color: #fff;">🏆 SEMI-FINAL</div>
+          <div class="match-teams" style="color: var(--color-gold);">TBD<br>vs. TBD</div>
+          <div class="match-info">🌟 Jul 15 · 3:00 PM ET</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FULL SCHEDULE SECTION -->
+  <div class="schedule-section">
+
+    <h2 class="section-title">Full <span class="accent">Schedule</span></h2>
+    <p class="section-subtitle">
+      All 104 matches · <span style="color:var(--color-gold);">⭐ Gold rows = Atlanta games</span>
+    </p>
+
+    <!-- TOOLBAR: filters + search -->
+    <div class="toolbar">
+
+      <!-- Filter buttons — JS listens for clicks on these -->
+      <button class="btn btn-outline active" onclick="filterMatches('all')" id="btn-all">
+        All (104)
+      </button>
+      <button class="btn btn-outline" onclick="filterMatches('atlanta')" id="btn-atlanta">
+        ⭐ Atlanta (8)
+      </button>
+      <button class="btn btn-outline" onclick="filterMatches('group')" id="btn-group">
+        Group Stage
+      </button>
+      <button class="btn btn-outline" onclick="filterMatches('knockout')" id="btn-knockout">
+        Knockouts
+      </button>
+
+      <!-- Search box -->
+      <div class="toolbar-search">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="🔍 Search team or city…"
+          oninput="searchMatches()"
+        />
+      </div>
+
+    </div>
+
+    <!-- Match count display -->
+    <p id="match-count" style="font-size:0.82rem; color:var(--color-muted); margin-bottom:1rem;">
+      Showing all 104 matches
+    </p>
+
+    <!-- THE MATCH TABLE — rows are generated by JavaScript below -->
+    <div style="overflow-x: auto;">
+      <table class="match-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Match</th>
+            <th>Group / Round</th>
+            <th class="hide-mobile">Date</th>
+            <th class="hide-mobile">Time (ET)</th>
+            <th>Venue</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="match-tbody">
+          <!-- Rows are injected here by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Shown when no matches match the search -->
+    <div id="no-results" class="hidden">
+      😕 No matches found for that search. Try a different team name or city.
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-number">104</span>
+        <span class="stat-label">Total Matches</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">48</span>
+        <span class="stat-label">Teams</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">16</span>
+        <span class="stat-label">Host Cities</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">8</span>
+        <span class="stat-label">ATL Games</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">39</span>
+        <span class="stat-label">Days</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">3</span>
+        <span class="stat-label">Countries</span>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      <strong>ATL Sports Hub</strong> · Built with ❤️ in Atlanta, GA ·
+      <span id="year"></span>
+    </p>
+    <p style="margin-top:0.4rem; font-size:0.78rem;">
+      Schedule data: FIFA World Cup 2026™ · All times Eastern (ET)
+    </p>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================
+       This is where the magic happens. The JS below:
+
+       1. Stores all 104 matches in a JavaScript ARRAY of OBJECTS
+       2. Reads that data and builds the HTML table rows
+       3. Powers the filter buttons (All / Atlanta / Group / Knockout)
+       4. Powers the search box
+       5. Runs a live countdown timer
+
+       KEY CONCEPTS TO LEARN HERE:
+       - Arrays: const matches = [ ... ]
+       - Objects: { home: 'Spain', away: 'Morocco', ... }
+       - Functions: function renderTable() { ... }
+       - DOM manipulation: document.getElementById(...)
+       - setInterval() for repeating code every second
+  ============================================================ -->
+  <script>
+
+    // ============================================================
+    // STEP 1 — THE DATA
+    // All 104 matches stored as an array of objects.
+    // Each object has: id, home, away, group, date, time, venue, city, atl
+    // "atl: true" marks Atlanta games
+    // ============================================================
+
+    const matches = [
+
+      // ---- GROUP STAGE ----
+
+      // Group A
+      { id:1,  home:"Mexico",       away:"South Africa",  group:"A", date:"Jun 11", time:"3:00 PM",  venue:"Estadio Azteca",        city:"Mexico City",    atl:false },
+      { id:2,  home:"Czechia",      away:"South Africa",  group:"A", date:"Jun 18", time:"12:00 PM", venue:"Mercedes-Benz Stadium", city:"Atlanta",        atl:true  },
+      { id:3,  home:"Korea Rep.",   away:"Czechia",       group:"A", date:"Jun 11", time:"10:00 PM", venue:"Estadio Akron",         city:"Guadalajara",    atl:false },
+      { id:4,  home:"Mexico",       away:"Korea Rep.",    group:"A", date:"Jun 18", time:"9:00 PM",  venue:"Estadio Akron",         city:"Guadalajara",    atl:false },
+      { id:5,  home:"Czechia",      away:"Mexico",        group:"A", date:"Jun 24", time:"9:00 PM",  venue:"Estadio Azteca",        city:"Mexico City",    atl:false },
+      { id:6,  home:"South Africa", away:"Korea Rep.",    group:"A", date:"Jun 24", time:"9:00 PM",  venue:"Estadio BBVA",          city:"Monterrey",      atl:false },
+
+      // Group B
+      { id:7,  home:"Canada",       away:"Bosnia-Herz.",  group:"B", date:"Jun 12", time:"3:00 PM",  venue:"BMO Field",             city:"Toronto",        atl:false },
+      { id:8,  home:"Qatar",        away:"Switzerland",   group:"B", date:"Jun 13", time:"3:00 PM",  venue:"Levi's Stadium",        city:"Santa Clara",    atl:false },
+      { id:9,  home:"Switzerland",  away:"Bosnia-Herz.",  group:"B", date:"Jun 18", time:"3:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+      { id:10, home:"Canada",       away:"Qatar",         group:"B", date:"Jun 18", time:"6:00 PM",  venue:"BC Place",              city:"Vancouver",      atl:false },
+      { id:11, home:"Bosnia-Herz.", away:"Qatar",         group:"B", date:"Jun 24", time:"3:00 PM",  venue:"Levi's Stadium",        city:"Santa Clara",    atl:false },
+      { id:12, home:"Switzerland",  away:"Canada",        group:"B", date:"Jun 24", time:"3:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+
+      // Group C
+      { id:13, home:"Brazil",       away:"Morocco",       group:"C", date:"Jun 13", time:"6:00 PM",  venue:"MetLife Stadium",       city:"New York/NJ",    atl:false },
+      { id:14, home:"Haiti",        away:"Uruguay",       group:"C", date:"Jun 13", time:"9:00 PM",  venue:"Hard Rock Stadium",     city:"Miami",          atl:false },
+      { id:15, home:"Morocco",      away:"Haiti",         group:"C", date:"Jun 24", time:"6:00 PM",  venue:"Mercedes-Benz Stadium", city:"Atlanta",        atl:true  },
+      { id:16, home:"Uruguay",      away:"Brazil",        group:"C", date:"Jun 19", time:"9:00 PM",  venue:"Hard Rock Stadium",     city:"Miami",          atl:false },
+      { id:17, home:"Brazil",       away:"Haiti",         group:"C", date:"Jun 26", time:"6:00 PM",  venue:"MetLife Stadium",       city:"New York/NJ",    atl:false },
+      { id:18, home:"Uruguay",      away:"Morocco",       group:"C", date:"Jun 26", time:"6:00 PM",  venue:"Hard Rock Stadium",     city:"Miami",          atl:false },
+
+      // Group D
+      { id:19, home:"France",       away:"Argentina",     group:"D", date:"Jun 14", time:"3:00 PM",  venue:"AT&T Stadium",          city:"Dallas",         atl:false },
+      { id:20, home:"Germany",      away:"Portugal",      group:"D", date:"Jun 14", time:"6:00 PM",  venue:"Lumen Field",           city:"Seattle",        atl:false },
+      { id:21, home:"Argentina",    away:"Germany",       group:"D", date:"Jun 19", time:"3:00 PM",  venue:"AT&T Stadium",          city:"Dallas",         atl:false },
+      { id:22, home:"Portugal",     away:"France",        group:"D", date:"Jun 20", time:"6:00 PM",  venue:"Lumen Field",           city:"Seattle",        atl:false },
+      { id:23, home:"Argentina",    away:"Portugal",      group:"D", date:"Jun 25", time:"6:00 PM",  venue:"AT&T Stadium",          city:"Dallas",         atl:false },
+      { id:24, home:"Germany",      away:"France",        group:"D", date:"Jun 25", time:"6:00 PM",  venue:"Lumen Field",           city:"Seattle",        atl:false },
+
+      // Group E
+      { id:25, home:"England",      away:"Senegal",       group:"E", date:"Jun 14", time:"9:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+      { id:26, home:"Nigeria",      away:"Colombia",      group:"E", date:"Jun 15", time:"3:00 PM",  venue:"Estadio Guadalajara",   city:"Guadalajara",    atl:false },
+      { id:27, home:"England",      away:"Nigeria",       group:"E", date:"Jun 20", time:"9:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+      { id:28, home:"Colombia",     away:"Senegal",       group:"E", date:"Jun 20", time:"3:00 PM",  venue:"Estadio Guadalajara",   city:"Guadalajara",    atl:false },
+      { id:29, home:"England",      away:"Colombia",      group:"E", date:"Jun 25", time:"9:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+      { id:30, home:"Senegal",      away:"Nigeria",       group:"E", date:"Jun 25", time:"9:00 PM",  venue:"Estadio Guadalajara",   city:"Guadalajara",    atl:false },
+
+      // Group F
+      { id:31, home:"Netherlands",  away:"Chile",         group:"F", date:"Jun 15", time:"6:00 PM",  venue:"Lumen Field",           city:"Seattle",        atl:false },
+      { id:32, home:"Japan",        away:"Ecuador",       group:"F", date:"Jun 15", time:"9:00 PM",  venue:"Levi's Stadium",        city:"Santa Clara",    atl:false },
+      { id:33, home:"Netherlands",  away:"Japan",         group:"F", date:"Jun 21", time:"6:00 PM",  venue:"Lumen Field",           city:"Seattle",        atl:false },
+      { id:34, home:"Ecuador",      away:"Chile",         group:"F", date:"Jun 21", time:"9:00 PM",  venue:"Levi's Stadium",        city:"Santa Clara",    atl:false },
+      { id:35, home:"Netherlands",  away:"Ecuador",       group:"F", date:"Jun 26", time:"9:00 PM",  venue:"Lumen Field",           city:"Seattle",        atl:false },
+      { id:36, home:"Japan",        away:"Chile",         group:"F", date:"Jun 26", time:"9:00 PM",  venue:"Levi's Stadium",        city:"Santa Clara",    atl:false },
+
+      // Group G
+      { id:37, home:"Italy",        away:"Ivory Coast",   group:"G", date:"Jun 16", time:"3:00 PM",  venue:"Gillette Stadium",      city:"Boston",         atl:false },
+      { id:38, home:"USA",          away:"Panama",        group:"G", date:"Jun 12", time:"8:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+      { id:39, home:"Italy",        away:"USA",           group:"G", date:"Jun 19", time:"6:00 PM",  venue:"Gillette Stadium",      city:"Boston",         atl:false },
+      { id:40, home:"Panama",       away:"Ivory Coast",   group:"G", date:"Jun 17", time:"9:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+      { id:41, home:"USA",          away:"Ivory Coast",   group:"G", date:"Jun 23", time:"9:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+      { id:42, home:"Italy",        away:"Panama",        group:"G", date:"Jun 23", time:"6:00 PM",  venue:"Gillette Stadium",      city:"Boston",         atl:false },
+
+      // Group H
+      { id:43, home:"Spain",        away:"Cabo Verde",    group:"H", date:"Jun 15", time:"12:00 PM", venue:"Mercedes-Benz Stadium", city:"Atlanta",        atl:true  },
+      { id:44, home:"Bahrain",      away:"New Zealand",   group:"H", date:"Jun 16", time:"9:00 PM",  venue:"Camping World Stadium", city:"Orlando",        atl:false },
+      { id:45, home:"Spain",        away:"Saudi Arabia",  group:"H", date:"Jun 21", time:"12:00 PM", venue:"Mercedes-Benz Stadium", city:"Atlanta",        atl:true  },
+      { id:46, home:"New Zealand",  away:"Cabo Verde",    group:"H", date:"Jun 21", time:"3:00 PM",  venue:"Camping World Stadium", city:"Orlando",        atl:false },
+      { id:47, home:"Saudi Arabia", away:"Bahrain",       group:"H", date:"Jun 26", time:"3:00 PM",  venue:"Camping World Stadium", city:"Orlando",        atl:false },
+      { id:48, home:"Spain",        away:"New Zealand",   group:"H", date:"Jun 26", time:"6:00 PM",  venue:"Camping World Stadium", city:"Orlando",        atl:false },
+
+      // Group I
+      { id:49, home:"Belgium",      away:"Peru",          group:"I", date:"Jun 16", time:"6:00 PM",  venue:"Empower Field",         city:"Denver",         atl:false },
+      { id:50, home:"Croatia",      away:"Ghana",         group:"I", date:"Jun 17", time:"3:00 PM",  venue:"Arrowhead Stadium",     city:"Kansas City",    atl:false },
+      { id:51, home:"Belgium",      away:"Croatia",       group:"I", date:"Jun 22", time:"6:00 PM",  venue:"Empower Field",         city:"Denver",         atl:false },
+      { id:52, home:"Ghana",        away:"Peru",          group:"I", date:"Jun 22", time:"3:00 PM",  venue:"Arrowhead Stadium",     city:"Kansas City",    atl:false },
+      { id:53, home:"Belgium",      away:"Ghana",         group:"I", date:"Jun 27", time:"3:00 PM",  venue:"Empower Field",         city:"Denver",         atl:false },
+      { id:54, home:"Croatia",      away:"Peru",          group:"I", date:"Jun 27", time:"3:00 PM",  venue:"Arrowhead Stadium",     city:"Kansas City",    atl:false },
+
+      // Group J
+      { id:55, home:"Portugal",     away:"TBD",           group:"J", date:"Jun 17", time:"6:00 PM",  venue:"Lincoln Financial",     city:"Philadelphia",   atl:false },
+      { id:56, home:"Iran",         away:"TBD",           group:"J", date:"Jun 17", time:"9:00 PM",  venue:"Lincoln Financial",     city:"Philadelphia",   atl:false },
+      { id:57, home:"Portugal",     away:"Iran",          group:"J", date:"Jun 22", time:"9:00 PM",  venue:"Lincoln Financial",     city:"Philadelphia",   atl:false },
+      { id:58, home:"TBD",          away:"TBD",           group:"J", date:"Jun 22", time:"6:00 PM",  venue:"Lincoln Financial",     city:"Philadelphia",   atl:false },
+      { id:59, home:"Portugal",     away:"TBD",           group:"J", date:"Jun 28", time:"6:00 PM",  venue:"Lincoln Financial",     city:"Philadelphia",   atl:false },
+      { id:60, home:"Iran",         away:"TBD",           group:"J", date:"Jun 28", time:"6:00 PM",  venue:"Lincoln Financial",     city:"Philadelphia",   atl:false },
+
+      // Group K
+      { id:61, home:"DR Congo",     away:"Uzbekistan",    group:"K", date:"Jun 27", time:"7:30 PM",  venue:"Mercedes-Benz Stadium", city:"Atlanta",        atl:true  },
+      { id:62, home:"Australia",    away:"Turkey",        group:"K", date:"Jun 16", time:"3:00 PM",  venue:"NRG Stadium",           city:"Houston",        atl:false },
+      { id:63, home:"Turkey",       away:"DR Congo",      group:"K", date:"Jun 21", time:"9:00 PM",  venue:"NRG Stadium",           city:"Houston",        atl:false },
+      { id:64, home:"Uzbekistan",   away:"Australia",     group:"K", date:"Jun 21", time:"6:00 PM",  venue:"NRG Stadium",           city:"Houston",        atl:false },
+      { id:65, home:"Australia",    away:"DR Congo",      group:"K", date:"Jun 26", time:"9:00 PM",  venue:"NRG Stadium",           city:"Houston",        atl:false },
+      { id:66, home:"Uzbekistan",   away:"Turkey",        group:"K", date:"Jun 26", time:"9:00 PM",  venue:"NRG Stadium",           city:"Houston",        atl:false },
+
+      // Group L
+      { id:67, home:"Algeria",      away:"TBD",           group:"L", date:"Jun 18", time:"6:00 PM",  venue:"Arrowhead Stadium",     city:"Kansas City",    atl:false },
+      { id:68, home:"TBD",          away:"TBD",           group:"L", date:"Jun 19", time:"3:00 PM",  venue:"Arrowhead Stadium",     city:"Kansas City",    atl:false },
+      { id:69, home:"Algeria",      away:"TBD",           group:"L", date:"Jun 23", time:"3:00 PM",  venue:"Arrowhead Stadium",     city:"Kansas City",    atl:false },
+      { id:70, home:"TBD",          away:"TBD",           group:"L", date:"Jun 23", time:"6:00 PM",  venue:"Arrowhead Stadium",     city:"Kansas City",    atl:false },
+      { id:71, home:"Algeria",      away:"TBD",           group:"L", date:"Jun 28", time:"9:00 PM",  venue:"Arrowhead Stadium",     city:"Kansas City",    atl:false },
+      { id:72, home:"TBD",          away:"TBD",           group:"L", date:"Jun 28", time:"9:00 PM",  venue:"Arrowhead Stadium",     city:"Kansas City",    atl:false },
+
+      // ---- ROUND OF 32 ----
+      { id:73,  home:"1A",  away:"2B",         group:"Round of 32", date:"Jun 29", time:"3:00 PM",  venue:"Estadio Azteca",        city:"Mexico City",    atl:false },
+      { id:74,  home:"1B",  away:"2A",         group:"Round of 32", date:"Jun 29", time:"6:00 PM",  venue:"BMO Field",             city:"Toronto",        atl:false },
+      { id:75,  home:"1C",  away:"2D",         group:"Round of 32", date:"Jun 29", time:"9:00 PM",  venue:"Hard Rock Stadium",     city:"Miami",          atl:false },
+      { id:76,  home:"1D",  away:"2C",         group:"Round of 32", date:"Jun 30", time:"3:00 PM",  venue:"AT&T Stadium",          city:"Dallas",         atl:false },
+      { id:77,  home:"1E",  away:"2F",         group:"Round of 32", date:"Jun 30", time:"6:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+      { id:78,  home:"1F",  away:"2E",         group:"Round of 32", date:"Jun 30", time:"9:00 PM",  venue:"Levi's Stadium",        city:"Santa Clara",    atl:false },
+      { id:79,  home:"1G",  away:"2H",         group:"Round of 32", date:"Jul 1",  time:"3:00 PM",  venue:"Gillette Stadium",      city:"Boston",         atl:false },
+      { id:80,  home:"1H",  away:"2G",         group:"Round of 32", date:"Jul 1",  time:"6:00 PM",  venue:"Camping World Stadium", city:"Orlando",        atl:false },
+      { id:81,  home:"1I",  away:"2J",         group:"Round of 32", date:"Jul 1",  time:"9:00 PM",  venue:"Empower Field",         city:"Denver",         atl:false },
+      { id:82,  home:"1J",  away:"2I",         group:"Round of 32", date:"Jul 2",  time:"3:00 PM",  venue:"Lincoln Financial",     city:"Philadelphia",   atl:false },
+      { id:83,  home:"1K",  away:"2L",         group:"Round of 32", date:"Jul 2",  time:"6:00 PM",  venue:"NRG Stadium",           city:"Houston",        atl:false },
+      { id:84,  home:"1L",  away:"3rd EHIJK",  group:"Round of 32", date:"Jul 1",  time:"12:00 PM", venue:"Mercedes-Benz Stadium", city:"Atlanta",        atl:true  },
+      { id:85,  home:"Best 3rd", away:"Best 3rd", group:"Round of 32", date:"Jul 2", time:"9:00 PM", venue:"Arrowhead Stadium",   city:"Kansas City",    atl:false },
+      { id:86,  home:"Best 3rd", away:"Best 3rd", group:"Round of 32", date:"Jul 3", time:"3:00 PM", venue:"MetLife Stadium",     city:"New York/NJ",    atl:false },
+      { id:87,  home:"Best 3rd", away:"Best 3rd", group:"Round of 32", date:"Jul 3", time:"6:00 PM", venue:"Lumen Field",         city:"Seattle",        atl:false },
+      { id:88,  home:"Best 3rd", away:"Best 3rd", group:"Round of 32", date:"Jul 3", time:"9:00 PM", venue:"Estadio BBVA",        city:"Monterrey",      atl:false },
+
+      // ---- ROUND OF 16 ----
+      { id:89,  home:"W73", away:"W74",  group:"Round of 16", date:"Jul 5",  time:"3:00 PM",  venue:"Estadio Azteca",        city:"Mexico City",    atl:false },
+      { id:90,  home:"W75", away:"W76",  group:"Round of 16", date:"Jul 5",  time:"6:00 PM",  venue:"AT&T Stadium",          city:"Dallas",         atl:false },
+      { id:91,  home:"W77", away:"W78",  group:"Round of 16", date:"Jul 5",  time:"9:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+      { id:92,  home:"W79", away:"W80",  group:"Round of 16", date:"Jul 6",  time:"3:00 PM",  venue:"Gillette Stadium",      city:"Boston",         atl:false },
+      { id:93,  home:"W81", away:"W82",  group:"Round of 16", date:"Jul 6",  time:"6:00 PM",  venue:"Empower Field",         city:"Denver",         atl:false },
+      { id:94,  home:"W83", away:"W84",  group:"Round of 16", date:"Jul 6",  time:"9:00 PM",  venue:"NRG Stadium",           city:"Houston",        atl:false },
+      { id:95,  home:"W86", away:"W88",  group:"Round of 16", date:"Jul 7",  time:"12:00 PM", venue:"Mercedes-Benz Stadium", city:"Atlanta",        atl:true  },
+      { id:96,  home:"W85", away:"W87",  group:"Round of 16", date:"Jul 7",  time:"6:00 PM",  venue:"MetLife Stadium",       city:"New York/NJ",    atl:false },
+
+      // ---- QUARTER-FINALS ----
+      { id:97,  home:"W89", away:"W90",  group:"Quarter-Final", date:"Jul 10", time:"3:00 PM",  venue:"AT&T Stadium",          city:"Dallas",         atl:false },
+      { id:98,  home:"W91", away:"W92",  group:"Quarter-Final", date:"Jul 10", time:"9:00 PM",  venue:"SoFi Stadium",          city:"Los Angeles",    atl:false },
+      { id:99,  home:"W93", away:"W94",  group:"Quarter-Final", date:"Jul 11", time:"3:00 PM",  venue:"NRG Stadium",           city:"Houston",        atl:false },
+      { id:100, home:"W95", away:"W96",  group:"Quarter-Final", date:"Jul 11", time:"9:00 PM",  venue:"MetLife Stadium",       city:"New York/NJ",    atl:false },
+
+      // ---- SEMI-FINALS ----
+      { id:101, home:"W97", away:"W98",  group:"Semi-Final",    date:"Jul 14", time:"3:00 PM",  venue:"AT&T Stadium",          city:"Dallas",         atl:false },
+      { id:102, home:"W99", away:"W100", group:"Semi-Final",    date:"Jul 15", time:"3:00 PM",  venue:"Mercedes-Benz Stadium", city:"Atlanta",        atl:true  },
+
+      // ---- THIRD PLACE ----
+      { id:103, home:"Loser SF1", away:"Loser SF2", group:"Third Place", date:"Jul 18", time:"5:00 PM", venue:"Hard Rock Stadium", city:"Miami",         atl:false },
+
+      // ---- FINAL ----
+      { id:104, home:"W101", away:"W102", group:"Final",        date:"Jul 19", time:"3:00 PM",  venue:"MetLife Stadium",       city:"New York/NJ",    atl:false },
+
+    ];
+
+
+    // ============================================================
+    // STEP 2 — RENDER THE TABLE
+    // This function reads the matches array and builds HTML rows
+    // ============================================================
+
+    // Keep track of the current filter so search can work alongside it
+    let currentFilter = 'all';
+
+    function renderTable(list) {
+      // Get the <tbody> element where we'll inject rows
+      const tbody = document.getElementById('match-tbody');
+
+      // .innerHTML = '' clears whatever was there before
+      tbody.innerHTML = '';
+
+      // If nothing to show, display the "no results" message
+      if (list.length === 0) {
+        document.getElementById('no-results').classList.remove('hidden');
+        document.getElementById('match-count').textContent = '0 matches found';
+        return;
+      }
+
+      document.getElementById('no-results').classList.add('hidden');
+      document.getElementById('match-count').textContent =
+        `Showing ${list.length} of 104 matches`;
+
+      // Track the last round we rendered so we can add section headers
+      let lastRound = '';
+
+      // Loop through every match and build a <tr> (table row)
+      list.forEach(match => {
+
+        // Determine the round label for section headers
+        const isGroupStage = match.group.length === 1;  // "A", "B", ... single letter = group
+        const roundLabel = isGroupStage ? 'Group Stage' : match.group;
+
+        // Add a round header row when the round changes
+        if (roundLabel !== lastRound) {
+          const headerRow = document.createElement('tr');
+          headerRow.className = 'round-header-row';
+          headerRow.innerHTML = `<td colspan="7">${roundLabel}</td>`;
+          tbody.appendChild(headerRow);
+          lastRound = roundLabel;
+        }
+
+        // Build the data row
+        const tr = document.createElement('tr');
+
+        // Atlanta games get a special CSS class for the gold highlight
+        if (match.atl) {
+          tr.className = 'atl-row';
+        }
+
+        // Template literal builds the row's HTML
+        tr.innerHTML = `
+          <td style="color:var(--color-muted); font-size:0.78rem;">${match.id}</td>
+          <td class="match-teams-cell">
+            ${match.home}
+            <span class="vs">vs</span>
+            ${match.away}
+          </td>
+          <td>
+            <span class="group-chip">
+              ${isGroupStage ? 'Grp ' + match.group : match.group.replace('Round of ', 'R').replace('Quarter-Final','QF').replace('Semi-Final','SF')}
+            </span>
+          </td>
+          <td class="date-cell hide-mobile">${match.date}</td>
+          <td class="time-cell hide-mobile">${match.time}</td>
+          <td class="venue-cell">${match.city}</td>
+          <td>${match.atl ? '<span class="atl-badge">⭐ ATL</span>' : ''}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+
+    // ============================================================
+    // STEP 3 — FILTER FUNCTIONS
+    // Called when the user clicks a filter button
+    // ============================================================
+
+    function filterMatches(filter) {
+      currentFilter = filter;
+
+      // Reset search box when switching filters
+      document.getElementById('search-input').value = '';
+
+      // Remove "active" from all buttons, add it to the clicked one
+      ['all','atlanta','group','knockout'].forEach(id => {
+        document.getElementById('btn-' + id).classList.remove('active');
+      });
+      document.getElementById('btn-' + filter).classList.add('active');
+
+      // Filter the matches array based on the chosen filter
+      let filtered;
+      if (filter === 'all') {
+        filtered = matches;
+      } else if (filter === 'atlanta') {
+        // .filter() keeps only items where the condition is true
+        filtered = matches.filter(m => m.atl === true);
+      } else if (filter === 'group') {
+        // Group names are single letters A–L
+        filtered = matches.filter(m => m.group.length === 1);
+      } else if (filter === 'knockout') {
+        filtered = matches.filter(m => m.group.length > 1);
+      }
+
+      renderTable(filtered);
+    }
+
+
+    // ============================================================
+    // STEP 4 — SEARCH FUNCTION
+    // Called every time the user types in the search box
+    // ============================================================
+
+    function searchMatches() {
+      // .toLowerCase() makes the search case-insensitive
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+
+      // Start from the already-filtered list, not the full list
+      let base;
+      if (currentFilter === 'atlanta')  base = matches.filter(m => m.atl);
+      else if (currentFilter === 'group') base = matches.filter(m => m.group.length === 1);
+      else if (currentFilter === 'knockout') base = matches.filter(m => m.group.length > 1);
+      else base = matches;
+
+      // If search is empty, show everything in the current filter
+      if (query === '') {
+        renderTable(base);
+        return;
+      }
+
+      // .includes() checks if a string contains another string
+      const filtered = base.filter(m =>
+        m.home.toLowerCase().includes(query) ||
+        m.away.toLowerCase().includes(query) ||
+        m.city.toLowerCase().includes(query) ||
+        m.venue.toLowerCase().includes(query)
+      );
+
+      renderTable(filtered);
+    }
+
+
+    // ============================================================
+    // STEP 5 — COUNTDOWN TIMER
+    // Updates every second using setInterval()
+    // ============================================================
+
+    // Target: Atlanta's first game — June 15, 2026 at 12:00 PM ET
+    // Note: Month is 0-indexed in JavaScript! June = 5
+    const targetDate = new Date('2026-06-15T12:00:00-04:00'); // Eastern time
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;   // difference in milliseconds
+
+      if (diff <= 0) {
+        // The game has started!
+        document.getElementById('countdown-box').innerHTML =
+          '<p style="color:var(--color-gold); font-family:var(--font-display); font-size:1.5rem;">⚽ THE GAME IS ON!</p>';
+        return;
+      }
+
+      // Convert milliseconds into days, hours, minutes, seconds
+      const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs  = Math.floor((diff % (1000 * 60)) / 1000);
+
+      // padStart(2, '0') makes sure single digits show as "05" not "5"
+      document.getElementById('cd-days').textContent  = String(days).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-mins').textContent  = String(mins).padStart(2, '0');
+      document.getElementById('cd-secs').textContent  = String(secs).padStart(2, '0');
+    }
+
+    // Run immediately so there's no blank flash
+    updateCountdown();
+
+    // Then run every 1000ms (1 second)
+    setInterval(updateCountdown, 1000);
+
+
+    // ============================================================
+    // STEP 6 — INITIALIZE
+    // Run when the page first loads
+    // ============================================================
+
+    // Render the full table on page load
+    renderTable(matches);
+
+    // Fill in current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+  </script>
+
+</body>
+</html>
