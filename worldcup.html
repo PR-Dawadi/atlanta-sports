@@ -59,48 +59,97 @@
       margin: 0 auto 2rem;
     }
 
-    /* ---- COUNTDOWN TIMER ---- */
-    .countdown-box {
-      display: inline-flex;
-      gap: 1.5rem;
-      background: var(--color-surface);
-      border: 1.5px solid var(--color-gold);
-      border-radius: var(--radius-lg);
-      padding: 1.2rem 2rem;
-      margin: 0 auto 2rem;
-      flex-wrap: wrap;
+    /* ---- COUNTDOWN TIMERS ---- */
+
+    /*
+      Two countdowns sit side by side.
+      On small screens they stack vertically (flex-wrap).
+    */
+    .countdowns-row {
+      display: flex;
+      gap: 1.2rem;
       justify-content: center;
+      flex-wrap: wrap;       /* stack on mobile */
+      margin: 0 auto 1.5rem;
+    }
+
+    /* Each individual countdown box */
+    .countdown-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem 1.8rem;
+      min-width: 260px;
+    }
+
+    /* World Cup opener — red border */
+    .countdown-box.wc-opener {
+      border: 1.5px solid var(--color-red);
+    }
+
+    /* Atlanta game — gold border */
+    .countdown-box.atl-game {
+      border: 1.5px solid var(--color-gold);
+    }
+
+    /* Label above the numbers, e.g. "🌍 World Cup Opens" */
+    .countdown-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .countdown-box.wc-opener .countdown-title { color: var(--color-red); }
+    .countdown-box.atl-game  .countdown-title { color: var(--color-gold); }
+
+    /* The row of D : H : M : S digits */
+    .countdown-digits {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
 
     .countdown-unit {
       text-align: center;
-      min-width: 54px;
+      min-width: 46px;
     }
 
     .countdown-number {
       font-family: var(--font-display);
-      font-size: 2.8rem;
-      color: var(--color-gold);
+      font-size: 2.4rem;
       line-height: 1;
       display: block;
     }
 
+    .countdown-box.wc-opener .countdown-number { color: var(--color-red); }
+    .countdown-box.atl-game  .countdown-number { color: var(--color-gold); }
+
     .countdown-label {
-      font-size: 0.68rem;
+      font-size: 0.62rem;
       font-weight: 800;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--color-muted);
-      margin-top: 0.2rem;
+      margin-top: 0.15rem;
       display: block;
     }
 
     .countdown-sep {
       font-family: var(--font-display);
-      font-size: 2.5rem;
+      font-size: 2rem;
       color: var(--color-border);
       line-height: 1;
-      padding-top: 0.1rem;
+    }
+
+    /* Small subtitle below digits, e.g. the match name */
+    .countdown-sub {
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: center;
     }
 
     /* ---- ATLANTA GAMES STRIP ---- */
@@ -368,7 +417,7 @@
         <li><a href="worldcup.html" class="active wc-link">⚽ World Cup</a></li>
         <li><a href="sports.html">Sports</a></li>
         <li><a href="concerts.html">Concerts</a></li>
-        <li><a href="learncode.html">Learn to Code</a></li>
+        <!--li><a href="learncode.html">Learn to Code</a></li-->
       </ul>
     </div>
   </nav>
@@ -383,31 +432,64 @@
       Including the <strong>Semi-Final</strong>
     </p>
 
-    <!-- COUNTDOWN TIMER — filled in by JavaScript below -->
-    <div class="countdown-box" id="countdown-box">
-      <div class="countdown-unit">
-        <span class="countdown-number" id="cd-days">--</span>
-        <span class="countdown-label">Days</span>
+    <!-- TWO COUNTDOWN TIMERS — both filled in by JavaScript below -->
+    <div class="countdowns-row">
+
+      <!-- COUNTDOWN 1: World Cup opening match -->
+      <div class="countdown-box wc-opener" id="wc-countdown-box">
+        <div class="countdown-title">🌍 World Cup Opens</div>
+        <div class="countdown-digits">
+          <div class="countdown-unit">
+            <span class="countdown-number" id="wc-days">--</span>
+            <span class="countdown-label">Days</span>
+          </div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit">
+            <span class="countdown-number" id="wc-hours">--</span>
+            <span class="countdown-label">Hours</span>
+          </div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit">
+            <span class="countdown-number" id="wc-mins">--</span>
+            <span class="countdown-label">Mins</span>
+          </div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit">
+            <span class="countdown-number" id="wc-secs">--</span>
+            <span class="countdown-label">Secs</span>
+          </div>
+        </div>
+        <div class="countdown-sub">Mexico vs. TBD · Jun 11 · Mexico City</div>
       </div>
-      <span class="countdown-sep">:</span>
-      <div class="countdown-unit">
-        <span class="countdown-number" id="cd-hours">--</span>
-        <span class="countdown-label">Hours</span>
+
+      <!-- COUNTDOWN 2: Atlanta's first game -->
+      <div class="countdown-box atl-game" id="atl-countdown-box">
+        <div class="countdown-title">⭐ Atlanta's First Game</div>
+        <div class="countdown-digits">
+          <div class="countdown-unit">
+            <span class="countdown-number" id="cd-days">--</span>
+            <span class="countdown-label">Days</span>
+          </div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit">
+            <span class="countdown-number" id="cd-hours">--</span>
+            <span class="countdown-label">Hours</span>
+          </div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit">
+            <span class="countdown-number" id="cd-mins">--</span>
+            <span class="countdown-label">Mins</span>
+          </div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit">
+            <span class="countdown-number" id="cd-secs">--</span>
+            <span class="countdown-label">Secs</span>
+          </div>
+        </div>
+        <div class="countdown-sub">Spain vs. Cabo Verde · Jun 15 · 12PM ET</div>
       </div>
-      <span class="countdown-sep">:</span>
-      <div class="countdown-unit">
-        <span class="countdown-number" id="cd-mins">--</span>
-        <span class="countdown-label">Mins</span>
-      </div>
-      <span class="countdown-sep">:</span>
-      <div class="countdown-unit">
-        <span class="countdown-number" id="cd-secs">--</span>
-        <span class="countdown-label">Secs</span>
-      </div>
+
     </div>
-    <p style="font-size:0.8rem; color: var(--color-muted);">
-      ⏳ Until Atlanta's first game: Spain vs. Cabo Verde · Jun 15, 12PM ET
-    </p>
   </header>
 
 
@@ -904,43 +986,80 @@
 
 
     // ============================================================
-    // STEP 5 — COUNTDOWN TIMER
-    // Updates every second using setInterval()
+    // STEP 5 — COUNTDOWN TIMERS
+    // We now have TWO countdowns, both updated every second.
+    //
+    // To avoid repeating the same code twice, we use a helper
+    // function called tickCountdown() that works for any target
+    // date and any set of HTML element IDs.
+    //
+    // This is called "DRY" — Don't Repeat Yourself — a key
+    // principle in good programming!
     // ============================================================
 
-    // Target: Atlanta's first game — June 15, 2026 at 12:00 PM ET
-    // Note: Month is 0-indexed in JavaScript! June = 5
-    const targetDate = new Date('2026-06-15T12:00:00-04:00'); // Eastern time
+    // Target dates — both in Eastern Time (-04:00 in summer)
+    const wcOpenerDate = new Date('2026-06-11T15:00:00-04:00'); // World Cup opener
+    const atlFirstGame = new Date('2026-06-15T12:00:00-04:00'); // Atlanta's first game
 
-    function updateCountdown() {
-      const now = new Date();
-      const diff = targetDate - now;   // difference in milliseconds
+    /*
+      tickCountdown() — a reusable countdown function.
+
+      Parameters:
+        targetDate  → the Date object we're counting down to
+        ids         → object with the 4 element IDs to update
+        boxId       → the container element id (to show "IT'S ON!" message)
+        doneMsg     → the message to show when time runs out
+    */
+    function tickCountdown(targetDate, ids, boxId, doneMsg) {
+      const now  = new Date();
+      const diff = targetDate - now;    // milliseconds remaining
 
       if (diff <= 0) {
-        // The game has started!
-        document.getElementById('countdown-box').innerHTML =
-          '<p style="color:var(--color-gold); font-family:var(--font-display); font-size:1.5rem;">⚽ THE GAME IS ON!</p>';
+        // Time's up — show the done message inside the box
+        document.getElementById(boxId).innerHTML =
+          `<p style="font-family:var(--font-display); font-size:1.3rem; padding:0.5rem;">${doneMsg}</p>`;
         return;
       }
 
-      // Convert milliseconds into days, hours, minutes, seconds
+      // Break the milliseconds down into human-readable units
       const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const secs  = Math.floor((diff % (1000 * 60)) / 1000);
 
-      // padStart(2, '0') makes sure single digits show as "05" not "5"
-      document.getElementById('cd-days').textContent  = String(days).padStart(2, '0');
-      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
-      document.getElementById('cd-mins').textContent  = String(mins).padStart(2, '0');
-      document.getElementById('cd-secs').textContent  = String(secs).padStart(2, '0');
+      // padStart(2, '0') turns "5" into "05" for a cleaner look
+      document.getElementById(ids.days).textContent  = String(days).padStart(2, '0');
+      document.getElementById(ids.hours).textContent = String(hours).padStart(2, '0');
+      document.getElementById(ids.mins).textContent  = String(mins).padStart(2, '0');
+      document.getElementById(ids.secs).textContent  = String(secs).padStart(2, '0');
     }
 
-    // Run immediately so there's no blank flash
-    updateCountdown();
+    // Wrapper functions — each calls tickCountdown with its own settings
+    function updateWcCountdown() {
+      tickCountdown(
+        wcOpenerDate,
+        { days: 'wc-days', hours: 'wc-hours', mins: 'wc-mins', secs: 'wc-secs' },
+        'wc-countdown-box',
+        '🌍 THE WORLD CUP IS HERE!'
+      );
+    }
 
-    // Then run every 1000ms (1 second)
-    setInterval(updateCountdown, 1000);
+    function updateAtlCountdown() {
+      tickCountdown(
+        atlFirstGame,
+        { days: 'cd-days', hours: 'cd-hours', mins: 'cd-mins', secs: 'cd-secs' },
+        'atl-countdown-box',
+        '⭐ ATL GAME IS ON!'
+      );
+    }
+
+    // Run both immediately (no blank flash on load)
+    updateWcCountdown();
+    updateAtlCountdown();
+
+    // Then tick both every second
+    setInterval(updateWcCountdown, 1000);
+    setInterval(updateAtlCountdown, 1000);
 
 
     // ============================================================
