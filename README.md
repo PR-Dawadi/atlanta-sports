@@ -1,4 +1,4 @@
-# 🏙️ Atlanta Sports Hub
+# 🏙️ Atlanta Sports Fan
 
 A website about Atlanta sports, live events, and FIFA World Cup 2026 — built with plain HTML, CSS, and JavaScript. No frameworks, no libraries, no build tools.
 
